@@ -13999,15 +13999,17 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h4 id="Data-Accessing">Data Accessing<a class="anchor-link" href="#Data-Accessing">&#182;</a></h4>
+<h4 id="Accessment">Accessment<a class="anchor-link" href="#Accessment">&#182;</a></h4>
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>I accessed the data both visually and programmatically and was able to pin-point some of the quality and structural issues.</p>
-<h5 id="Quality-Issues">Quality Issues<a class="anchor-link" href="#Quality-Issues">&#182;</a></h5><ul>
+<h4 id="Quality-Issues">Quality Issues<a class="anchor-link" href="#Quality-Issues">&#182;</a></h4><ul>
 <li>Lots of null values in certain columns in the tweet archieve dataset</li>
 <li>Some columns contain retweet data which are not needed in the tweet archive dataset</li>
+<li>Some incorrect names in the archieve name column</li>
+<li>Some numerator_rating are incorrect</li>
 <li>Multiple denominator_rating values </li>
 <li>Timestamp is presented as string instead of datetime in the archive dataset</li>
 <li>The source column in the archieve dataset contains string of html values that should be categorical</li>
@@ -14046,6 +14048,8 @@ a.anchor-link {
 <ol>
 <li>Only original tweet were required so, to remove retweet data, I drop all row where the retweet_status_id were not null.</li>
 <li>Retweet columns are no longer of any importance as all values are null. I dropped them and other columns with very high null values. The columns  dropped were in_reply_to_status_id, in_reply_to_user_id, retweeted_status_id, retweeted_status_user_id, retweeted_status_timestamp</li>
+<li>Search out incorrect names as they all began with lowercase and replace them with None.</li>
+<li>I extracted the numerator rating having decimal from the text column using regular expression and save to a new column. I then selected the index or rows with wrong nuerator rating using the non null values in the new column. With the selected index I simply loop through the rating_numerator column to correct the wrong rating. After which, I dropped the ext column.</li>
 <li>The rating_denominator had multiple value. For even comparison of the rating_numerator the denominator has to be same. Since we had only 23 of them that were not 10, we dropped all rows with rating_denominator other than 10.</li>
 <li>Since all value in the rating_denominator are now same(ie 10), that column is no longer needed in the table so, I dropped the rating_denominator column.</li>
 <li>We now have just one rating column which is the rating_numerator so I simply changed the column name from rating_numerator to rating.</li>
